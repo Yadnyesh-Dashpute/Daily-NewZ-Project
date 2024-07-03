@@ -51,7 +51,7 @@
 
   <div class="container row mx-auto">
 
-
+    <div id="content">
     <!-- Cards Starts Here -->
     <div class="card m-4" style="width: 18rem;">
       <img src="..." class="card-img-top" alt="...">
@@ -62,102 +62,19 @@
         <a href="#" class="btn btn-primary">Go somewhere</a>
       </div>
     </div>
-    <!-- Cards Ends Here  -->
-
-    <!-- Cards Starts Here -->
-    <div class="card m-4" style="width: 18rem;">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-          content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
     </div>
-    <!-- Cards Ends Here  -->
-    <!-- Cards Starts Here -->
-    <div class="card m-4" style="width: 18rem;">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-          content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    <!-- Cards Ends Here  -->
-    <!-- Cards Starts Here -->
-    <div class="card m-4" style="width: 18rem;">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-          content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    <!-- Cards Ends Here  -->
-    <!-- Cards Starts Here -->
-    <div class="card m-4" style="width: 18rem;">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-          content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    <!-- Cards Ends Here  -->
-    <!-- Cards Starts Here -->
-    <div class="card m-4" style="width: 18rem;">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-          content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    <!-- Cards Ends Here  -->
-    <!-- Cards Starts Here -->
-    <div class="card m-4" style="width: 18rem;">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-          content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    <!-- Cards Ends Here  -->
-    <!-- Cards Starts Here -->
-    <div class="card m-4" style="width: 18rem;">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-          content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    <!-- Cards Ends Here  -->
-    <!-- Cards Starts Here -->
-    <div class="card m-4" style="width: 18rem;">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-          content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    <!-- Cards Ends Here  -->
   </div>
+    <!-- Cards Ends Here  -->
+
+
+   
+ 
+ 
 
   <div class="text-center">
     <ul class="pagination text-center mx-auto">
-      <li class="page-item disabled">
-        <a class="page-link">Previous</a>
+      <li class="page-item">
+        <a id="pre" class="page-link">Previous</a>
       </li>
       <li class="page-item"><a class="page-link" href="#">1</a></li>
       <li class="page-item active" aria-current="page">
@@ -165,22 +82,45 @@
       </li>
       <li class="page-item"><a class="page-link" href="#">3</a></li>
       <li class="page-item">
-        <a class="page-link" href="#">Next</a>
+        <a id="next" class="page-link" href="#">Next</a>
       </li>
     </ul>
   </div>
 
 </body>
 <script>
+
+  let articlePerPage;
+  let totalPages;
   let query = window.location.search.split("?")[1].split("&")[0].split("=")[1]
   let pageNo = parseInt(window.location.search.split("?")[1].split("&")[1].split("=")[1])
 
-  console.log(query)
+  console.log(query, pageNo)
   const fetchNews = async (query, pageNo) => {
-    let a = await fetch(`https://newsapi.org/v2/everything?q=${query}&apiKey=d4c4240011ac4d1c942a46d67c0c479d`)
+    let a = await fetch(`/api?q=${query}&apiKey=d4c4240011ac4d1c942a46d67c0c479d`)
     let r = await a.json()
-    fetchNews("sports", 2)
+    console.log(r)
+    totalPages = Math.ceil(r.totalResults / articlePerPage)
+    pre.href = `/q=${query}&pageNo=${pageNo - 1}`
+    next.href = `/q=${query}&pageNo=${pageNo + 1}`
+
+    let str = " "
+    for (let item of r.articles) {
+      str = str + `
+          <div class="card m-4" style="width: 18rem;">
+      <img src="${item.urlToImage}" class="card-img-top" alt="Error">
+      <div class="card-body">
+        <h5 class="card-title">${item.title}</h5>
+        <p class="card-text">${item.description}</p>
+        <a href="${item.url}" class="btn btn-primary">Read More..</a>
+      </div>
+    </div>
+      `
+    }
+    content.innerHtml = str
   }
+  fetchNews("sports", 1)
+
 </script>
 
 </html>
