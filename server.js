@@ -3,7 +3,7 @@ const app = express()
 const axios = require("axios")
 const path = require("path")
 
-app.get("/hello", function(req,res){
+app.get("/", function(req,res){
     const index = path.join(__dirname, '/', '../project', 'index.html' );
     res.sendFile(index);
 })
